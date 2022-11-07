@@ -1,0 +1,9 @@
+.input
+{
+    resize: none;
+    overflow-y: auto;
+}
+
+/* 
+make this component 100% width of parent? should make it so it matches size of CommentSection when using default form and match size of child comment when using reply functionality?
+ */
