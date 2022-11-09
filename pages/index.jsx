@@ -1,23 +1,14 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { UserWrapper, UserDispatchContext } from '../components/UserContext/UserContext'
-import { useContext, useEffect } from 'react'
+import { UserWrapper } from '../components/UserContext/UserContext'
 import CommentSection from '../components/CommentSection/CommentSection'
 
+const getUserUrl = 'http://localhost:8000/user'
 const getCommentsUrl = 'http://localhost:8000/messages'
+const domain = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'http://localhost:8000'
 
 export default function Home()
 {
-  // const setUser = useContext(UserDispatchContext);
-  // console.log(setUser)
-  // useEffect(() =>
-  // {
-  //   fetch('http://localhost:8000/user')
-  //     .then((res) => res.json())
-  //     .then((data) => setUser(data))
-  // }, [setUser]);
-  // console.log('HOME')
   return (
     <UserWrapper>
       <div className={styles.container}>
@@ -27,7 +18,11 @@ export default function Home()
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-          <CommentSection allCommentsUrl={getCommentsUrl} />
+          <CommentSection
+            allCommentsUrl={getCommentsUrl}
+            getUserUrl={getUserUrl}
+            editCommentUrl={''}
+            domain={domain} />
         </main>
         <footer className={styles.footer}>
           <p>Created by <a className="link-visible" href="https://mschultz-portfolio.herokuapp.com/">Michael Schultz</a></p>

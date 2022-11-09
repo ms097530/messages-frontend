@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import AddCommentSection from '../AddCommentSection/AddCommentForm'
+import AddCommentForm from '../AddCommentForm/AddCommentForm'
 import Comment from '../Comment/Comment'
 import { UserContext, UserDispatchContext } from '../UserContext/UserContext'
 import Image from 'next/image'
 
-export default function CommentSection({ allCommentsUrl, removeCommentUrl, editCommentUrl, addCommentUrl })
+export default function CommentSection({ domain, allCommentsUrl, removeCommentUrl, editCommentUrl, addCommentUrl, getUserUrl })
 {
     const [comments, setComments] = useState([])
     const currentUser = useContext(UserContext)
@@ -16,7 +16,7 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
 
     useEffect(() =>
     {
-        fetch('http://localhost:8000/user')
+        fetch(domain + '/user')
             .then(res =>
             {
                 return res.json()
@@ -28,7 +28,7 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
                 // console.log('likedPosts type: ', typeof data.user.likedPosts)
                 setUser({ data: data, isLoading: false })
             })
-        fetch(allCommentsUrl)
+        fetch(domain + '/messages')
             .then(res =>
             {
                 return res.json()
@@ -43,16 +43,15 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
                 setComments([])
             })
 
-    }, [allCommentsUrl, setUser])
+    }, [domain, setUser])
 
     const upvote = useCallback(async (messageId) =>
     {
         console.log(messageId)
-        let res = await fetch('http://localhost:8000/messages/likes',
+        let res = await fetch(domain + '/messages/likes/' + messageId,
             {
                 method: 'PUT',
                 body: JSON.stringify({
-                    messageId: messageId,
                     userId: currentUser?.data.user._id,
                     method: 'up'
                 }),
@@ -62,15 +61,14 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
             })
         let parsedRes = await res.json()
         console.log(parsedRes.message)
-    }, [currentUser?.data?.user?._id])
+    }, [currentUser?.data?.user?._id, domain])
 
     const downvote = useCallback(async (messageId) =>
     {
-        let res = await fetch('http://localhost:8000/messages/likes',
+        let res = await fetch(domain + '/messages/likes/' + messageId,
             {
                 method: 'PUT',
                 body: JSON.stringify({
-                    messageId: messageId,
                     userId: currentUser?.data.user._id,
                     method: 'down'
                 }),
@@ -80,7 +78,7 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
             })
         let parsedRes = await res.json()
         console.log(parsedRes.message)
-    }, [currentUser?.data?.user?._id])
+    }, [currentUser?.data?.user?._id, domain])
 
     const deleteComment = useCallback(async (messageId) =>
     {
@@ -107,7 +105,7 @@ export default function CommentSection({ allCommentsUrl, removeCommentUrl, editC
                 })
             }
             {/* render AddComment section */}
-            <AddCommentSection replyingUserId={null} />
+            <AddCommentForm replyingUserId={null} />
         </>
     )
 }

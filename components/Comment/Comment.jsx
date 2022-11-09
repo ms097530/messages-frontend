@@ -4,7 +4,7 @@ import { UserContext } from '../UserContext/UserContext';
 import LikeCounter from './LikeCounter/LikeCounter';
 import UserControls from './UserControls/UserControls';
 import DateDiff from 'date-diff';
-import AddCommentForm from '../AddCommentSection/AddCommentForm';
+import AddCommentForm from '../AddCommentForm/AddCommentForm';
 
 export default React.memo(function Comment({ comment, upvote, downvote, deleteComment })
 {
@@ -66,11 +66,11 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                 setReplying={setIsReplying} />
             {
                 isReplying &&
-                <AddCommentForm replyingUserId={comment._id} />
+                <AddCommentForm replyingUserId={comment._id} isEditing={false} />
             }
             {
                 isEditing &&
-                <AddCommentForm replyingUserId={comment.repliedTo} />
+                <AddCommentForm replyingUserId={comment.repliedTo} isEditing={true} />
             }
         </div>
     )

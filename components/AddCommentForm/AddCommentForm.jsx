@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { UserContext } from '../UserContext/UserContext'
 import styles from './AddCommentForm.module.css'
 
-export default function AddCommentForm({ replyingUserId, content })
+export default function AddCommentForm({ replyingUserId, content, isEditing })
 {
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
     const currentUser = useContext(UserContext)
@@ -15,7 +15,7 @@ export default function AddCommentForm({ replyingUserId, content })
             const res = await fetch('http://localhost:8000/messages', {
                 method: 'POST',
                 body: JSON.stringify({
-                    message: data.comment,
+                    content: data.comment,
                     repliedTo: replyingUserId,
                     userId: currentUser.data.user._id
                 }),
