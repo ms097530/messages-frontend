@@ -39,7 +39,32 @@ export default function CommentSection({ })
             {
                 // comments will be in order of oldest to newest
                 // extract top level comments, splice replies after respective comment, move onto next response (possibly a reply) and continuously extract replies
-                setComments([...data.messages])
+                const sortedComments = data.messages.filter(comment =>
+                {
+                    return comment.repliedTo === undefined || comment.repliedTo === null
+                })
+                // console.log(sortedComments)
+                for (let i = 0; i < sortedComments.length; ++i)
+                {
+                    // console.log('there are ' + sortedComments.length + ' top level comments')
+                    let numReplies = sortedComments[i].replies.length
+                    let replies = []
+                    for (let j = 0; j < numReplies; ++j)
+                    {
+                        // console.log('this comment has ' + numReplies + ' replies')
+
+                        replies.push(data.messages.find(comment => comment._id === sortedComments[i].replies[j]))
+                        // for (k = i; k < i + numReplies; ++k)
+                        // {
+                        //     sorte
+                        // }
+                    }
+                    // console.log('REPLIES ARRAY: ', replies)
+                    sortedComments.splice(i + 1, 0, ...replies)
+                }
+                // console.log(sortedComments)
+                // setComments([...data.messages])
+                setComments(sortedComments)
             })
             .catch(err =>
             {
@@ -112,17 +137,18 @@ export default function CommentSection({ })
             </div>
             {/* render fetched comments */}
             {
-                comments.map(comment =>
-                {
-                    return (
-                        <Comment
-                            key={comment._id}
-                            comment={comment}
-                            upvote={upvote}
-                            downvote={downvote}
-                            deleteComment={deleteComment} />
-                    )
-                })
+                comments.length === 0 ? 'No comments found' :
+                    comments.map(comment =>
+                    {
+                        return (
+                            <Comment
+                                key={comment._id}
+                                comment={comment}
+                                upvote={upvote}
+                                downvote={downvote}
+                                deleteComment={deleteComment} />
+                        )
+                    })
             }
             {/* render AddComment section */}
             <AddCommentForm replyingUserId={null} />
