@@ -1,14 +1,15 @@
+import { useContext } from 'react'
+
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { UserWrapper } from '../components/UserContext/UserContext'
 import CommentSection from '../components/CommentSection/CommentSection'
+import { DomainContext } from '../components/DomainContext/DomainContext'
 
-const getUserUrl = 'http://localhost:8000/user'
-const getCommentsUrl = 'http://localhost:8000/messages'
-const domain = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'http://localhost:8000'
 
 export default function Home()
 {
+  const domain = useContext(DomainContext);
   return (
     <UserWrapper>
       <div className={styles.container}>
@@ -19,9 +20,6 @@ export default function Home()
         </Head>
         <main className={styles.main}>
           <CommentSection
-            allCommentsUrl={getCommentsUrl}
-            getUserUrl={getUserUrl}
-            editCommentUrl={''}
             domain={domain} />
         </main>
         <footer className={styles.footer}>

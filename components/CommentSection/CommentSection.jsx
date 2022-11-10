@@ -3,12 +3,14 @@ import AddCommentForm from '../AddCommentForm/AddCommentForm'
 import Comment from '../Comment/Comment'
 import { UserContext, UserDispatchContext } from '../UserContext/UserContext'
 import Image from 'next/image'
+import { DomainContext } from '../DomainContext/DomainContext'
 
-export default function CommentSection({ domain, allCommentsUrl, removeCommentUrl, editCommentUrl, addCommentUrl, getUserUrl })
+export default function CommentSection({ })
 {
     const [comments, setComments] = useState([])
     const currentUser = useContext(UserContext)
     const setUser = useContext(UserDispatchContext)
+    const domain = useContext(DomainContext)
     // console.log(currentUser)
     // console.log(setUser)
     // console.log(setUser)
@@ -35,6 +37,8 @@ export default function CommentSection({ domain, allCommentsUrl, removeCommentUr
             })
             .then(data =>
             {
+                // comments will be in order of oldest to newest
+                // extract top level comments, splice replies after respective comment, move onto next response (possibly a reply) and continuously extract replies
                 setComments([...data.messages])
             })
             .catch(err =>
@@ -52,7 +56,7 @@ export default function CommentSection({ domain, allCommentsUrl, removeCommentUr
             {
                 method: 'PUT',
                 body: JSON.stringify({
-                    userId: currentUser?.data.user._id,
+                    userId: currentUser?.data?.user?._id,
                     method: 'up'
                 }),
                 headers: {
@@ -69,7 +73,7 @@ export default function CommentSection({ domain, allCommentsUrl, removeCommentUr
             {
                 method: 'PUT',
                 body: JSON.stringify({
-                    userId: currentUser?.data.user._id,
+                    userId: currentUser?.data?.user?._id,
                     method: 'down'
                 }),
                 headers: {
@@ -82,8 +86,19 @@ export default function CommentSection({ domain, allCommentsUrl, removeCommentUr
 
     const deleteComment = useCallback(async (messageId) =>
     {
-
-    }, [])
+        let res = await fetch(domain + '/messages/' + messageId,
+            {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    userId: currentUser?.data?.user?._id
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        let parsedRes = await res.json()
+        console.log(parsedRes.message)
+    }, [currentUser?.data?.user?._id, domain])
 
     return (
         <>
@@ -100,7 +115,12 @@ export default function CommentSection({ domain, allCommentsUrl, removeCommentUr
                 comments.map(comment =>
                 {
                     return (
-                        <Comment key={comment._id} comment={comment} upvote={upvote} downvote={downvote} />
+                        <Comment
+                            key={comment._id}
+                            comment={comment}
+                            upvote={upvote}
+                            downvote={downvote}
+                            deleteComment={deleteComment} />
                     )
                 })
             }

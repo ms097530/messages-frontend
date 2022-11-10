@@ -1,10 +1,11 @@
 import React from 'react'
 
-export default function UserControls({ isPoster, deleteComment, setEditing, setReplying })
+export default function UserControls({ isPoster, commentId, deleteComment, setEditing, setReplying })
 {
     async function handleDelete()
     {
-        console.log('clicking this will delete a comment later')
+        // console.log('clicking this will delete a comment later')
+        deleteComment(commentId)
     }
     return (
         <div>
