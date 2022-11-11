@@ -11,7 +11,7 @@ export default function CommentHeadline({ username, timeSince, avatar, isPoster 
                 isPoster &&
                 <h2>you</h2>
             }
-            <h3>{timeSince}</h3>
+            <h3>{timeSince ? timeSince : 'Just now'}</h3>
         </div>
     )
 }

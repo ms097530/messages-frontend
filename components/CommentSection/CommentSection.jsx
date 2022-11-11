@@ -49,24 +49,8 @@ export default function CommentSection({ })
                     sortedComments.splice(i + 1, 0, ...replies)
                 }
                 setComments(sortedComments)
-                // initialize socket.io in the component that manages the state you are watching for changes in
-                const socket = io('http://localhost:8000')
-                socket.on('message', (data) =>
-                {
-                    if (data.action === 'create')
-                    {
 
-                    }
-                    if (data.action === 'update')
-                    {
 
-                    }
-                    if (data.action === 'delete')
-                    {
-
-                    }
-
-                })
             })
             .catch(err =>
             {
@@ -75,6 +59,50 @@ export default function CommentSection({ })
             })
 
     }, [domain, setUser])
+
+    useEffect(() =>
+    {
+        console.log('registering socket.io event listeners')
+        // initialize socket.io in the component that manages the state you are watching for changes in
+        const socket = io('http://localhost:8000')
+        socket.on('messages', (data) =>
+        {
+            if (data.action === 'create')
+            {
+                // console.log(data)
+
+                setComments(prevState =>
+                {
+                    const message = data.message
+                    const newComments = [...prevState]
+                    if (message.repliedTo)
+                    {
+                        let parentIndex = comments.findIndex(comment => comment._id === message.repliedTo.messageId)
+                        newComments.splice(parentIndex + newComments[parentIndex].replies.length + 1, 0, message)
+                    }
+                    else
+                    {
+                        newComments.push(message)
+                    }
+                    console.log('newComments: ', newComments)
+                    return newComments
+                })
+            }
+            if (data.action === 'update')
+            {
+
+            }
+            if (data.action === 'delete')
+            {
+
+            }
+
+        })
+        return () =>
+        {
+            socket.off('messages')
+        }
+    }, [comments])
 
     const upvote = useCallback(async (messageId) =>
     {

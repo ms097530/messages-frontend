@@ -40,6 +40,11 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
     }
     const parsedUrl = domain + '/' + comment.user.imageUrl.replace(/\\/g, '/')
 
+    function cancelEditing()
+    {
+        setIsEditing(false)
+    }
+
     return (
         <div>
             <LikeCounter
@@ -82,14 +87,15 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                     currCommentId={comment._id}
                     content={comment.content}
                     // replyingUserId={comment.repliedTo}
-                    isEditing={true} />
+                    isEditing={true}
+                    cancelEditing={cancelEditing} />
             }
         </div>
     )
 }, (prevProps, currProps) =>
 {
-    console.log('prevProps ', prevProps)
-    console.log('currProps ', currProps)
+    // console.log('prevProps ', prevProps)
+    // console.log('currProps ', currProps)
     if (
         prevProps.comment._id === currProps.comment._id &&
         prevProps.comment.content === currProps.comment.content &&

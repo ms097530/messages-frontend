@@ -33,7 +33,13 @@ export default function AddCommentForm({ parentCommentId, currCommentId,/* reply
         })}>
             <textarea className={styles.input} placeholder='Add a comment...' draggable='false'
                 {...register('comment')} defaultValue={content ? content : ''} />
-            <button>Send</button>
+            <button>
+                {
+                    isEditing ? 'Update' :
+                        parentCommentId ? 'Reply' :
+                            'Send'
+                }
+            </button>
         </form>
     )
 }
