@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
+import { io } from 'socket.io-client'
+
 import AddCommentForm from '../AddCommentForm/AddCommentForm'
 import Comment from '../Comment/Comment'
 import { UserContext, UserDispatchContext } from '../UserContext/UserContext'
@@ -11,10 +13,6 @@ export default function CommentSection({ })
     const currentUser = useContext(UserContext)
     const setUser = useContext(UserDispatchContext)
     const domain = useContext(DomainContext)
-    // console.log(currentUser)
-    // console.log(setUser)
-    // console.log(setUser)
-    // console.log('COMMENT SECTION')   
 
     useEffect(() =>
     {
@@ -25,9 +23,6 @@ export default function CommentSection({ })
             })
             .then(data =>
             {
-                // _id automatically converted to string?
-                // console.log(typeof data.user._id)
-                // console.log('likedPosts type: ', typeof data.user.likedPosts)
                 setUser({ data: data, isLoading: false })
             })
         fetch(domain + '/messages')
@@ -43,28 +38,35 @@ export default function CommentSection({ })
                 {
                     return comment.repliedTo === undefined || comment.repliedTo === null
                 })
-                // console.log(sortedComments)
                 for (let i = 0; i < sortedComments.length; ++i)
                 {
-                    // console.log('there are ' + sortedComments.length + ' top level comments')
                     let numReplies = sortedComments[i].replies.length
                     let replies = []
                     for (let j = 0; j < numReplies; ++j)
                     {
-                        // console.log('this comment has ' + numReplies + ' replies')
-
                         replies.push(data.messages.find(comment => comment._id === sortedComments[i].replies[j]))
-                        // for (k = i; k < i + numReplies; ++k)
-                        // {
-                        //     sorte
-                        // }
                     }
-                    // console.log('REPLIES ARRAY: ', replies)
                     sortedComments.splice(i + 1, 0, ...replies)
                 }
-                // console.log(sortedComments)
-                // setComments([...data.messages])
                 setComments(sortedComments)
+                // initialize socket.io in the component that manages the state you are watching for changes in
+                const socket = io('http://localhost:8000')
+                socket.on('message', (data) =>
+                {
+                    if (data.action === 'create')
+                    {
+
+                    }
+                    if (data.action === 'update')
+                    {
+
+                    }
+                    if (data.action === 'delete')
+                    {
+
+                    }
+
+                })
             })
             .catch(err =>
             {
