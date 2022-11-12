@@ -77,8 +77,10 @@ export default function CommentSection({ })
                     const newComments = [...prevState]
                     if (message.repliedTo)
                     {
+                        // comment is in reply to another comment, add it to the end of the replies and make sure the parent also stores the additional reply so the length increments with each additional reply
                         let parentIndex = comments.findIndex(comment => comment._id === message.repliedTo.messageId)
                         newComments.splice(parentIndex + newComments[parentIndex].replies.length + 1, 0, message)
+                        newComments[parentIndex].replies.push(message)
                     }
                     else
                     {
@@ -90,11 +92,106 @@ export default function CommentSection({ })
             }
             if (data.action === 'update')
             {
-
+                if (data.actionType === 'likes-up')
+                {
+                    const alreadyLiked = currentUser.data.user.likedPosts.includes(data.messageId)
+                    const alreadyDisliked = currentUser.data.user.dislikedPosts.includes(data.messageId)
+                    setComments(prevState =>
+                    {
+                        return prevState.map(comment =>
+                        {
+                            return comment._id !== data.messageId ? comment :
+                                alreadyLiked ?
+                                    { ...comment, likes: comment.likes - 1 } :
+                                    { ...comment, likes: comment.likes + 1 }
+                        })
+                    })
+                    setUser(prevState =>
+                    {
+                        return {
+                            data: {
+                                user: {
+                                    ...prevState.data.user,
+                                    // if user is already liked, remove messageId from likedPosts
+                                    // if user is already disliked, remove messageId from dislikedPosts, likedPosts stays the same
+                                    // if not voted on, add like
+                                    likedPosts: alreadyLiked ?
+                                        prevState.data.user.likedPosts.filter(id => id !== data.messageId) :
+                                        alreadyDisliked ? prevState.data.user.likedPosts :
+                                            [...prevState.data.user.likedPosts, data.messageId],
+                                    dislikedPosts: alreadyDisliked ?
+                                        prevState.data.user.dislikedPosts.filter(id => id !== data.messageId) :
+                                        prevState.data.user.dislikedPosts
+                                }
+                            }, isLoading: false
+                        }
+                    })
+                }
+                else if (data.actionType === 'likes-down')
+                {
+                    const alreadyDisliked = currentUser.data.user.dislikedPosts.includes(data.messageId)
+                    const alreadyLiked = currentUser.data.user.likedPosts.includes(data.messageId)
+                    setComments(prevState =>
+                    {
+                        return prevState.map(comment =>
+                        {
+                            return comment._id !== data.messageId ? comment :
+                                alreadyDisliked ?
+                                    { ...comment, likes: comment.likes + 1 } :
+                                    { ...comment, likes: comment.likes - 1 }
+                        })
+                    })
+                    setUser(prevState =>
+                    {
+                        return {
+                            data: {
+                                user: {
+                                    ...prevState.data.user,
+                                    likedPosts: alreadyLiked ?
+                                        prevState.data.user.likedPosts.filter(id => id !== data.messageId) :
+                                        prevState.data.user.likedPosts,
+                                    dislikedPosts: alreadyDisliked ? prevState.data.user.dislikedPosts.filter(id => id !== data.messageId) :
+                                        alreadyLiked ? prevState.data.user.dislikedPosts :
+                                            [...prevState.data.user.dislikedPosts, data.messageId]
+                                }
+                            }, isLoading: false
+                        }
+                    })
+                }
+                else if (data.actionType === 'edit-content')
+                {
+                    setComments(prevState =>
+                    {
+                        const newComments = [...prevState]
+                        const comment = newComments.find(comment => comment._id === data.messageId)
+                        comment.content = data.content
+                        return newComments
+                    })
+                }
             }
             if (data.action === 'delete')
             {
+                setComments(prevState =>
+                {
+                    // filtering out from rendered comments and removing it from parent's replies
+                    // const newComments = [...prevState]
+                    // const removeIndex = newComments.findIndex(comment => comment._id === data.messageId)
+                    // if (newComments[removeIndex].repliedTo)
+                    // {
+                    //     // if comment being removed is a reply, remove it from parent's replies property
+                    //     const parent = newComments.find(comment => comment._id === newComments[removeIndex].repliedTo.messageId)
+                    //     parent.replies = parent.replies.filter(replyId => replyId !== data.messageId)
+                    // }
+                    // newComments.splice(removeIndex, 1)
+                    // console.log(newComments)
+                    // return newComments
 
+                    // changing isDeleted flag to change content that is rendered and comment stored in props for individual Comment
+                    const newComments = [...prevState]
+                    const removeIndex = newComments.findIndex(comment => comment._id === data.messageId)
+                    newComments[removeIndex].isDeleted = true
+                    return newComments
+                })
             }
 
         })
@@ -102,7 +199,7 @@ export default function CommentSection({ })
         {
             socket.off('messages')
         }
-    }, [comments])
+    }, [comments, currentUser, setUser])
 
     const upvote = useCallback(async (messageId) =>
     {
@@ -170,6 +267,8 @@ export default function CommentSection({ })
                 comments.length === 0 ? 'No comments found' :
                     comments.map(comment =>
                     {
+                        if (comment.isDeleted)
+                            comment.content = 'This comment has been deleted.'
                         return (
                             <Comment
                                 key={comment._id}
