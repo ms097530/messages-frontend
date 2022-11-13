@@ -58,3 +58,12 @@
     display: flex;
     align-items: center;
 }
+
+@media (min-width: 600px)
+{
+    .comment
+    {
+        grid-template-columns: min-content auto;
+        column-gap: var(--space-2);
+    }
+}

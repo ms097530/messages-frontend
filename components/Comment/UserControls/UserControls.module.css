@@ -46,3 +46,11 @@
 {
     content: url('/images/icon-edit.svg');
 }
+
+@media (min-width: 600px)
+{
+    .controls
+    {
+        column-gap: var(--space-1);
+    }
+}

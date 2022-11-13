@@ -36,3 +36,14 @@
 {
     color: red;
 }
+
+@media (min-width: 600px)
+{
+    .container
+    {
+        display: flex;
+        flex-direction: column;
+        margin-right: auto;
+        margin-bottom: auto;
+    }
+}

@@ -14,13 +14,16 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
 {
     const [isReplying, setIsReplying] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
-    const isMobile = useMediaQuery(
-        { maxWidth: 376 }
+    const isLarge = useMediaQuery(
+        { minWidth: 600 }
     )
 
     const currentUser = useContext(UserContext)
     const domain = useContext(DomainContext)
+
     let isPoster = currentUser.data.user._id === comment.user._id
+    // if (currentUser.data)
+    //     isPoster = currentUser.data.user._id === comment.user._id
 
     let lengthSince = new DateDiff(new Date(), new Date(comment.createdAt))
     let timeSince =
@@ -33,7 +36,6 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
         minute: lengthSince.minutes(),
         second: lengthSince.seconds()
     }
-    // console.log(timeSince)
 
     let timeString
     for (const [key, value] of Object.entries(timeSince))
@@ -55,39 +57,78 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
     const isReply = comment.repliedTo
     return (
         <>
-            <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
-                {
-                    isMobile &&
+            {/* Mobile version of comment body */}
+            {
+                !isLarge &&
+                <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
+
                     <CommentHeadline
                         username={comment.user.username}
                         timeSince={timeString}
                         avatar={parsedUrl}
                         isPoster={isPoster} />
-                }
 
-                <p className={styles.content}>
-                    {/* add @user where user is the one the comment is in reply to */}
-                    {
-                        comment.repliedTo &&
-                        <span className={styles.replyTag}>@{comment.repliedTo.username} </span>
-                    }
-                    {comment.content}
-                </p>
-                <div className={styles.controlsContainer}>
+
+                    <p className={styles.content}>
+                        {/* add @user where user is the one the comment is in reply to */}
+                        {
+                            comment.repliedTo &&
+                            <span className={styles.replyTag}>@{comment.repliedTo.username} </span>
+                        }
+                        {comment.content}
+                    </p>
+                    <div className={styles.controlsContainer}>
+                        <LikeCounter
+                            commentId={comment._id}
+                            likes={comment.likes}
+                            upvote={upvote}
+                            downvote={downvote} />
+                        <UserControls
+                            isPoster={isPoster}
+                            commentId={comment._id}
+                            deleteComment={deleteComment}
+                            setEditing={setIsEditing}
+                            setReplying={setIsReplying} />
+                    </div>
+                </div>
+            }
+
+            {/* Large version of comment body */}
+            {
+                isLarge &&
+                <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
                     <LikeCounter
                         commentId={comment._id}
                         likes={comment.likes}
                         upvote={upvote}
                         downvote={downvote} />
-                    <UserControls
-                        isPoster={isPoster}
-                        commentId={comment._id}
-                        deleteComment={deleteComment}
-                        setEditing={setIsEditing}
-                        setReplying={setIsReplying} />
+                    <div className={styles.innerContainer}>
+                        <div style={{ display: 'flex', rowGap: '0.5rem', justifyContent: 'space-between' }}>
+                            <CommentHeadline
+                                username={comment.user.username}
+                                timeSince={timeString}
+                                avatar={parsedUrl}
+                                isPoster={isPoster} />
+                            <UserControls
+                                isPoster={isPoster}
+                                commentId={comment._id}
+                                deleteComment={deleteComment}
+                                setEditing={setIsEditing}
+                                setReplying={setIsReplying} />
+                        </div>
+                        <p className={styles.content}>
+                            {/* add @user where user is the one the comment is in reply to */}
+                            {
+                                comment.repliedTo &&
+                                <span className={styles.replyTag}>@{comment.repliedTo.username} </span>
+                            }
+                            {comment.content}
+                        </p>
+                    </div>
                 </div>
-            </div>
+            }
 
+            {/* Comment forms */}
             {
                 isReplying &&
                 <div className={`${styles.form} ${isReply ? styles.reply : ''}`}>
@@ -114,7 +155,6 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                         endEditing={() => setIsEditing(false)} />
                 </div>
             }
-
         </>
 
     )
