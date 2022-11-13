@@ -26,6 +26,10 @@ export default function CommentSection({ })
             {
                 setUser({ data: data, isLoading: false })
             })
+            .catch(err =>
+            {
+                setUser({ data: null, isLoading: false })
+            })
         fetch(domain + '/messages')
             .then(res =>
             {
@@ -50,8 +54,6 @@ export default function CommentSection({ })
                     sortedComments.splice(i + 1, 0, ...replies)
                 }
                 setComments(sortedComments)
-
-
             })
             .catch(err =>
             {
@@ -65,7 +67,7 @@ export default function CommentSection({ })
     {
         console.log('registering socket.io event listeners')
         // initialize socket.io in the component that manages the state you are watching for changes in
-        const socket = io('http://localhost:8000')
+        const socket = io(domain)
         socket.on('messages', (data) =>
         {
             if (data.action === 'create')
@@ -187,7 +189,7 @@ export default function CommentSection({ })
         {
             socket.off('messages')
         }
-    }, [comments, currentUser, setUser])
+    }, [comments, currentUser, setUser, domain])
 
     const upvote = useCallback(async (messageId) =>
     {
@@ -243,17 +245,26 @@ export default function CommentSection({ })
     return (
         <div className={styles.container}>
             {/* make sure able to load user data */}
-            <h1 style={currentUser.isLoading ? { visibility: 'hidden' } : {}}>
-                {!currentUser.isLoading ? currentUser.data.user.username : 'PLACEHOLDER'}
-            </h1>
-
-            {/* make sure getting image from assigned user works */}
-            <div>
-                {!currentUser.isLoading && <Image width={32} height={32} src={'http://localhost:8000/' + currentUser.data.user.imageUrl} alt="user avatar" />}
+            <div className={styles.userContainer}>
+                <h1 className={styles.user} style={currentUser.isLoading ? { visibility: 'hidden', textAlign: 'center' } : { textAlign: 'center' }}>
+                    {!currentUser.isLoading && currentUser.data ? currentUser.data.user.username : 'NO USER FOUND'}
+                </h1>
+                {/* make sure getting image from assigned user works */}
+                {
+                    !currentUser.isLoading && currentUser.data &&
+                    <div className={styles.userImage}>
+                        <Image
+                            layout={'fixed'}
+                            width={32}
+                            height={32}
+                            src={domain + '/' + currentUser.data.user.imageUrl}
+                            alt="user avatar" />
+                    </div>
+                }
             </div>
             {/* render fetched comments */}
             {
-                comments.length === 0 ? 'No comments found' :
+                comments.length === 0 ? <p style={{ textAlign: 'center' }}>No comments found</p> :
                     comments.map(comment =>
                     {
                         if (comment.isDeleted)
@@ -269,9 +280,12 @@ export default function CommentSection({ })
                     })
             }
             {/* render AddComment section */}
-            <div className={styles.form}>
-                <AddCommentForm />
-            </div>
+            {
+                currentUser.data &&
+                <div className={styles.form}>
+                    <AddCommentForm />
+                </div>
+            }
         </div>
     )
 }

@@ -6,6 +6,22 @@
     width: 100%;
 }
 
+.userContainer
+{
+    border: 1px dashed var(--dark-blue);
+    border-radius: var(--space-1);
+}
+
+.user
+{
+    margin-bottom: var(--space-1);
+}
+
+.userImage
+{
+    text-align: center;
+}
+
 .form
 {
     width: 100%;
