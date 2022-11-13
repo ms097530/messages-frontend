@@ -1,0 +1,59 @@
+.comment
+{
+    /* background-color: pink; */
+    background-color: var(--very-light-gray);
+    padding: var(--space-2);
+    display: grid;
+    border-radius: 1rem;
+}
+
+.reply
+{
+    /* background-color: aqua; */
+    width: 95%;
+    margin-left: auto;
+    position: relative;
+}
+
+.reply::before
+{
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: calc(100% + var(--space-2));
+    background-color: var(--dark-blue);
+    opacity: 0.1;
+    left: calc(var(--space-2) * -1);
+    top: 0;
+}
+
+.reply:not(:has(+.reply))::before
+{
+    height: 100%;
+}
+
+.form
+{
+    padding: var(--space-2);
+    border-radius: 1rem;
+}
+
+.content
+{
+    padding: var(--space-1);
+    background-color: var(--very-light-gray);
+    margin-block-end: var(--space-1);
+}
+
+.replyTag
+{
+    color: var(--moderate-blue);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.controlsContainer
+{
+    display: flex;
+    align-items: center;
+}

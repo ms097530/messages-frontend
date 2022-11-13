@@ -1,4 +1,5 @@
-import React, { useContext, useReducer, useState } from 'react'
+import React, { useContext, useState } from 'react'
+
 import CommentHeadline from './CommentHeadline/CommentHeadline'
 import { UserContext } from '../UserContext/UserContext';
 import LikeCounter from './LikeCounter/LikeCounter';
@@ -6,6 +7,7 @@ import UserControls from './UserControls/UserControls';
 import DateDiff from 'date-diff';
 import AddCommentForm from '../AddCommentForm/AddCommentForm';
 import { DomainContext } from '../DomainContext/DomainContext';
+import styles from './Comment.module.css';
 
 export default React.memo(function Comment({ comment, upvote, downvote, deleteComment })
 {
@@ -45,52 +47,65 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
         setIsEditing(false)
     }
 
+    const isReply = comment.repliedTo
     return (
-        <div>
-            <LikeCounter
-                commentId={comment._id}
-                likes={comment.likes}
-                upvote={upvote}
-                downvote={downvote} />
-            <CommentHeadline
-                username={comment.user.username}
-                timeSince={timeString}
-                avatar={parsedUrl}
-                isPoster={isPoster} />
+        <>
+            <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
 
-            <p>
-                {/* add @user where user is the one the comment is in reply to */}
-                {
-                    comment.repliedTo &&
-                    <span>@{comment.repliedTo.username} </span>
-                }
-                {comment.content}
-            </p>
-            <UserControls
-                isPoster={isPoster}
-                commentId={comment._id}
-                deleteComment={deleteComment}
-                setEditing={setIsEditing}
-                setReplying={setIsReplying} />
+                <CommentHeadline
+                    username={comment.user.username}
+                    timeSince={timeString}
+                    avatar={parsedUrl}
+                    isPoster={isPoster} />
+
+                <p className={styles.content}>
+                    {/* add @user where user is the one the comment is in reply to */}
+                    {
+                        comment.repliedTo &&
+                        <span className={styles.replyTag}>@{comment.repliedTo.username} </span>
+                    }
+                    {comment.content}
+                </p>
+                <div className={styles.controlsContainer}>
+                    <LikeCounter
+                        commentId={comment._id}
+                        likes={comment.likes}
+                        upvote={upvote}
+                        downvote={downvote} />
+                    <UserControls
+                        isPoster={isPoster}
+                        commentId={comment._id}
+                        deleteComment={deleteComment}
+                        setEditing={setIsEditing}
+                        setReplying={setIsReplying} />
+                </div>
+            </div>
+
             {
                 isReplying &&
-                <AddCommentForm
-                    // user is replying to THIS comment
-                    parentCommentId={comment._id}
-                    isEditing={false} />
+                <div className={`${styles.form} ${isReply ? styles.reply : ''}`}>
+                    <AddCommentForm
+                        // user is replying to THIS comment
+                        parentCommentId={comment._id}
+                        isEditing={false} />
+                </div>
             }
             {
                 isEditing &&
-                <AddCommentForm
-                    // when editing, maintain same repliedTo info from original post
-                    parentCommentId={comment.repliedTo?.messageId}
-                    currCommentId={comment._id}
-                    content={comment.content}
-                    // replyingUserId={comment.repliedTo}
-                    isEditing={true}
-                    cancelEditing={cancelEditing} />
+                <div className={`${styles.form} ${isReply ? styles.reply : ''}`}>
+                    <AddCommentForm
+                        // when editing, maintain same repliedTo info from original post
+                        parentCommentId={comment.repliedTo?.messageId}
+                        currCommentId={comment._id}
+                        content={comment.content}
+                        // replyingUserId={comment.repliedTo}
+                        isEditing={true}
+                        cancelEditing={cancelEditing} />
+                </div>
             }
-        </div>
+
+        </>
+
     )
 }, (prevProps, currProps) =>
 {

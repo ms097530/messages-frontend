@@ -1,7 +1,13 @@
+.commentForm
+{
+    display: grid;
+}
+
 .input
 {
     resize: none;
     overflow-y: auto;
+    padding: var(--space-1);
 }
 
 /* 

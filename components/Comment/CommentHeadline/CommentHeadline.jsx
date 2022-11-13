@@ -1,17 +1,21 @@
 import React from 'react'
 import Image from 'next/image'
 
+import styles from './CommentHeadline.module.css'
+
 export default function CommentHeadline({ username, timeSince, avatar, isPoster })
 {
     return (
-        <div>
-            <Image width={64} height={64} src={avatar} alt={username + ' avatar'} />
-            <h2>{username}</h2>
+        <div className={styles.headline}>
+            <div className={styles.avatarContainer}>
+                <Image className={styles.avatar} layout={'fixed'} width={32} height={32} src={avatar} alt={username + ' avatar'} />
+            </div>
+            <h2 className={styles.username}>{username}</h2>
             {
                 isPoster &&
-                <h2>you</h2>
+                <h2 className={styles.selfTag}>you</h2>
             }
-            <h3>{timeSince ? timeSince : 'Just now'}</h3>
+            <h3 className={styles.timestamp}>{timeSince ? timeSince : 'Just now'}</h3>
         </div>
     )
 }

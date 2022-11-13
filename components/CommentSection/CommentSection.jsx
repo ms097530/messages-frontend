@@ -6,6 +6,7 @@ import Comment from '../Comment/Comment'
 import { UserContext, UserDispatchContext } from '../UserContext/UserContext'
 import Image from 'next/image'
 import { DomainContext } from '../DomainContext/DomainContext'
+import styles from './CommentSection.module.css'
 
 export default function CommentSection({ })
 {
@@ -253,14 +254,14 @@ export default function CommentSection({ })
     }, [currentUser?.data?.user?._id, domain])
 
     return (
-        <>
+        <div className={styles.container}>
             {/* make sure able to load user data */}
             <h1 style={currentUser.isLoading ? { visibility: 'hidden' } : {}}>
                 {!currentUser.isLoading ? currentUser.data.user.username : 'PLACEHOLDER'}
             </h1>
             {/* make sure getting image from assigned user works */}
             <div>
-                {!currentUser.isLoading && <Image width={64} height={64} src={'http://localhost:8000/' + currentUser.data.user.imageUrl} alt="user avatar" />}
+                {!currentUser.isLoading && <Image width={32} height={32} src={'http://localhost:8000/' + currentUser.data.user.imageUrl} alt="user avatar" />}
             </div>
             {/* render fetched comments */}
             {
@@ -280,7 +281,9 @@ export default function CommentSection({ })
                     })
             }
             {/* render AddComment section */}
-            <AddCommentForm replyingUserId={null} />
-        </>
+            <div className={styles.form}>
+                <AddCommentForm replyingUserId={null} />
+            </div>
+        </div>
     )
 }

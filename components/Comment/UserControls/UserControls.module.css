@@ -1,0 +1,48 @@
+.controls
+{
+    margin-left: auto;
+    /* display: inline-block; */
+    display: flex;
+    align-items: center;
+}
+
+.controls button
+{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    position: relative;
+}
+
+.defaultBtn
+{
+    color: var(--moderate-blue);
+}
+
+.warningBtn
+{
+    color: var(--soft-red);
+}
+
+.reply::before,
+.delete::before,
+.edit::before
+{
+    margin-right: 3px;
+}
+
+.reply::before
+{
+    content: url('/images/icon-reply.svg');
+}
+
+.delete::before
+{
+    content: url('/images/icon-delete.svg');
+}
+
+.edit::before
+{
+    content: url('/images/icon-edit.svg');
+}

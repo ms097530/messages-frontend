@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../../UserContext/UserContext'
+import styles from './LikeCounter.module.css'
 
 export default function LikeCounter({ commentId, likes, upvote, downvote })
 {
@@ -10,11 +12,12 @@ export default function LikeCounter({ commentId, likes, upvote, downvote })
     {
         await downvote(commentId)
     }
+    const currentUser = useContext(UserContext)
     return (
-        <div>
-            <span onClick={handleUpvote}>+</span>
-            <span>{likes}</span>
-            <span onClick={handleDownvote}>-</span>
+        <div className={styles.container}>
+            <span className={styles.upvote} onClick={handleUpvote}>+</span>
+            <span className={styles.likes}>{likes}</span>
+            <span className={styles.downvote} onClick={handleDownvote}>-</span>
         </div>
     )
 }

@@ -1,0 +1,11 @@
+.container
+{
+    /* border: 2px solid red; */
+    display: flex;
+    margin-right: auto;
+    gap: var(--space-2);
+    background-color: var(--light-gray);
+    box-shadow: 0px 0px 5px 1px var(--grayish-blue);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--space-1);
+}
