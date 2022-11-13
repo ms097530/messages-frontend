@@ -12,7 +12,7 @@ export default function Home()
   const domain = useContext(DomainContext);
   return (
     <UserWrapper>
-      <div>
+      <div className={styles.container}>
         <Head>
           <title>Interactive Comments Section - Frontend Mentor</title>
           <meta name="description" content="Fullstack Interactive Comments Section by Michael Schultz" />

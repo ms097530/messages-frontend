@@ -174,19 +174,6 @@ export default function CommentSection({ })
             {
                 setComments(prevState =>
                 {
-                    // filtering out from rendered comments and removing it from parent's replies
-                    // const newComments = [...prevState]
-                    // const removeIndex = newComments.findIndex(comment => comment._id === data.messageId)
-                    // if (newComments[removeIndex].repliedTo)
-                    // {
-                    //     // if comment being removed is a reply, remove it from parent's replies property
-                    //     const parent = newComments.find(comment => comment._id === newComments[removeIndex].repliedTo.messageId)
-                    //     parent.replies = parent.replies.filter(replyId => replyId !== data.messageId)
-                    // }
-                    // newComments.splice(removeIndex, 1)
-                    // console.log(newComments)
-                    // return newComments
-
                     // changing isDeleted flag to change content that is rendered and comment stored in props for individual Comment
                     const newComments = [...prevState]
                     const removeIndex = newComments.findIndex(comment => comment._id === data.messageId)
@@ -259,6 +246,7 @@ export default function CommentSection({ })
             <h1 style={currentUser.isLoading ? { visibility: 'hidden' } : {}}>
                 {!currentUser.isLoading ? currentUser.data.user.username : 'PLACEHOLDER'}
             </h1>
+
             {/* make sure getting image from assigned user works */}
             <div>
                 {!currentUser.isLoading && <Image width={32} height={32} src={'http://localhost:8000/' + currentUser.data.user.imageUrl} alt="user avatar" />}
@@ -282,7 +270,7 @@ export default function CommentSection({ })
             }
             {/* render AddComment section */}
             <div className={styles.form}>
-                <AddCommentForm replyingUserId={null} />
+                <AddCommentForm />
             </div>
         </div>
     )

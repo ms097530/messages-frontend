@@ -1,7 +1,7 @@
 .headline
 {
     display: flex;
-    column-gap: var(--space-2);
+    column-gap: var(--space-1);
     font-size: 16px;
     align-items: center;
     margin-block-end: var(--space-1);
@@ -30,4 +30,8 @@
 .timestamp
 {
     opacity: 0.5;
+    font-weight: 400;
 }
+
+@media (max-width: 376px)
+{}

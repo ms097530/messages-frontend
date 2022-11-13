@@ -6,7 +6,7 @@ import { DomainContext } from '../DomainContext/DomainContext'
 import { UserContext } from '../UserContext/UserContext'
 import styles from './AddCommentForm.module.css'
 
-export default function AddCommentForm({ parentCommentId, currCommentId,/* replyingUserId, */ content, isEditing })
+export default function AddCommentForm({ parentCommentId, currCommentId, content, isEditing, endEditing, isReplying, endReplying })
 {
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
     const currentUser = useContext(UserContext)
@@ -31,7 +31,10 @@ export default function AddCommentForm({ parentCommentId, currCommentId,/* reply
             })
             const parsedRes = await res.json()
             console.log(parsedRes)
-
+            if (isEditing)
+                endEditing()
+            if (isReplying)
+                endReplying()
         })}>
 
             <textarea
@@ -40,12 +43,14 @@ export default function AddCommentForm({ parentCommentId, currCommentId,/* reply
                 placeholder='Add a comment...'
                 draggable='false'
                 {...register('comment')} defaultValue={content ? content : ''} />
-            <div>
+            <div className={styles.container}>
                 {
                     !currentUser.isLoading &&
-                    <Image layout={'fixed'} src={domain + '/' + currentUser.data.user.imageUrl} height={32} width={32} alt={currentUser.data.user.username + ' avatar'} />
+                    <div className={styles.avatarContainer}>
+                        <Image layout={'fixed'} src={domain + '/' + currentUser.data.user.imageUrl} height={32} width={32} alt={currentUser.data.user.username + ' avatar'} />
+                    </div>
                 }
-                <button>
+                <button className={styles.submitBtn}>
                     {
                         isEditing ? 'Update' :
                             parentCommentId ? 'Reply' :

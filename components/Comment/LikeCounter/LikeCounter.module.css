@@ -2,10 +2,37 @@
 {
     /* border: 2px solid red; */
     display: flex;
+    align-items: center;
     margin-right: auto;
     gap: var(--space-2);
     background-color: var(--light-gray);
-    box-shadow: 0px 0px 5px 1px var(--grayish-blue);
+    /* box-shadow: 0px 0px 1px 1px var(--grayish-blue); */
     padding: var(--space-1) var(--space-2);
     border-radius: var(--space-1);
+}
+
+.upvote,
+.downvote
+{
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+    opacity: 0.7;
+    color: var(--grayish-blue);
+}
+
+.likes
+{
+    color: var(--moderate-blue);
+    font-weight: 500;
+}
+
+.upvote.voted
+{
+    color: rgb(15, 180, 15);
+}
+
+.downvote.voted
+{
+    color: red;
 }

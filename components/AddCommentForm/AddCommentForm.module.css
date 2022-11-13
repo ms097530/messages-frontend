@@ -8,6 +8,31 @@
     resize: none;
     overflow-y: auto;
     padding: var(--space-1);
+    margin-block-end: var(--space-2);
+    border-radius: var(--space-1);
+    border: 1px solid var(--light-gray);
+}
+
+.container
+{
+    display: flex;
+    align-items: center;
+}
+
+.avatarContainer
+{
+    margin-right: auto;
+}
+
+.submitBtn
+{
+    margin-left: auto;
+    text-transform: uppercase;
+    color: var(--white);
+    background-color: var(--moderate-blue);
+    border-radius: var(--space-1);
+    border: none;
+    padding: var(--space-2) var(--space-3);
 }
 
 /* 

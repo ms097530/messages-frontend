@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 import CommentHeadline from './CommentHeadline/CommentHeadline'
 import { UserContext } from '../UserContext/UserContext';
@@ -13,6 +14,10 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
 {
     const [isReplying, setIsReplying] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
+    const isMobile = useMediaQuery(
+        { maxWidth: 376 }
+    )
+
     const currentUser = useContext(UserContext)
     const domain = useContext(DomainContext)
     let isPoster = currentUser.data.user._id === comment.user._id
@@ -51,12 +56,14 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
     return (
         <>
             <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
-
-                <CommentHeadline
-                    username={comment.user.username}
-                    timeSince={timeString}
-                    avatar={parsedUrl}
-                    isPoster={isPoster} />
+                {
+                    isMobile &&
+                    <CommentHeadline
+                        username={comment.user.username}
+                        timeSince={timeString}
+                        avatar={parsedUrl}
+                        isPoster={isPoster} />
+                }
 
                 <p className={styles.content}>
                     {/* add @user where user is the one the comment is in reply to */}
@@ -87,7 +94,9 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                     <AddCommentForm
                         // user is replying to THIS comment
                         parentCommentId={comment._id}
-                        isEditing={false} />
+                        isReplying={true}
+                        isEditing={false}
+                        endReplying={() => setIsReplying(false)} />
                 </div>
             }
             {
@@ -99,8 +108,10 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                         currCommentId={comment._id}
                         content={comment.content}
                         // replyingUserId={comment.repliedTo}
+                        isReplying={false}
                         isEditing={true}
-                        cancelEditing={cancelEditing} />
+                        cancelEditing={cancelEditing}
+                        endEditing={() => setIsEditing(false)} />
                 </div>
             }
 

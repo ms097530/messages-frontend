@@ -1,3 +1,8 @@
+.container
+{
+  padding-inline: var(--space-1);
+}
+
 .main
 {
   margin-inline: auto;
