@@ -9,7 +9,7 @@ import styles from './AddCommentForm.module.css'
 
 export default function AddCommentForm({ parentCommentId, currCommentId, content, isEditing, endEditing, isReplying, endReplying })
 {
-    const { register, handleSubmit, reset, formState, formState: { isSubmitSuccessful } } = useForm()
+    const { register, handleSubmit, clearErrors, reset, formState, formState: { isSubmitSuccessful, errors } } = useForm()
     const currentUser = useContext(UserContext)
     const domain = useContext(DomainContext)
     const isLarge = useMediaQuery(
@@ -64,7 +64,7 @@ export default function AddCommentForm({ parentCommentId, currCommentId, content
                 rows={5}
                 placeholder={`Add a ${isReplying ? 'reply' : 'comment'}...`}
                 draggable='false'
-                {...register('comment')} defaultValue={content ? content : ''} />
+                {...register('comment', { required: true, minLength: 3 })} defaultValue={content ? content : ''} />
 
             {
                 isLarge &&

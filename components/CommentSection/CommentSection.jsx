@@ -275,7 +275,8 @@ export default function CommentSection({ })
                                 comment={comment}
                                 upvote={upvote}
                                 downvote={downvote}
-                                deleteComment={deleteComment} />
+                                deleteComment={deleteComment}
+                                isDeleted={comment.isDeleted} />
                         )
                     })
             }

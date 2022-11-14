@@ -47,6 +47,73 @@
     content: url('/images/icon-edit.svg');
 }
 
+.modal
+{
+    position: absolute;
+    /* color: red; */
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    min-width: 320px;
+    max-width: 400px;
+    background-color: var(--very-light-gray);
+    padding: var(--space-3);
+    border-radius: var(--space-1);
+    border: none;
+}
+
+.modal *
+{
+    margin-block: var(--space-1);
+}
+
+.modalText
+{
+    line-height: calc(var(--space-2) * 1.5);
+}
+
+.modalHeading
+{
+    margin-block-end: var(--space-2);
+    font-size: 1.25rem;
+}
+
+.overlay
+{
+    position: fixed;
+    inset: 0;
+    background-color: rgba(var(--grayish-blue-rgb), 0.7);
+}
+
+.btnContainer
+{
+    display: flex;
+    column-gap: var(--space-2);
+    /* justify-content: space-between; */
+}
+
+.modalBtn
+{
+    flex: 1;
+    padding: var(--space-2) var(--space-1);
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    border-radius: var(--space-1);
+}
+
+.modalCancelBtn
+{
+    background-color: var(--grayish-blue);
+}
+
+.modalDeleteBtn
+{
+    background-color: var(--soft-red);
+}
+
 @media (min-width: 600px)
 {
     .controls

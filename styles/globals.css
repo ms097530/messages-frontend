@@ -13,6 +13,7 @@
   /* Colors - Neutral */
   --dark-blue: hsl(212, 24%, 26%);
   --grayish-blue: hsl(211, 10%, 45%);
+  --grayish-blue-rgb: 103, 114, 126;
   --light-gray: hsl(223, 19%, 93%);
   --very-light-gray: hsl(228, 33%, 97%);
   --white: hsl(0, 0%, 100%);

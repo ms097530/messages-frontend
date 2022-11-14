@@ -10,7 +10,7 @@ import AddCommentForm from '../AddCommentForm/AddCommentForm';
 import { DomainContext } from '../DomainContext/DomainContext';
 import styles from './Comment.module.css';
 
-export default React.memo(function Comment({ comment, upvote, downvote, deleteComment })
+export default React.memo(function Comment({ comment, upvote, downvote, deleteComment, isDeleted })
 {
     const [isReplying, setIsReplying] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
@@ -54,6 +54,11 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
         setIsEditing(false)
     }
 
+    function toggleReplying()
+    {
+        setIsReplying(prevState => !prevState)
+    }
+
     const isReply = comment.repliedTo
     return (
         <>
@@ -83,12 +88,15 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                             likes={comment.likes}
                             upvote={upvote}
                             downvote={downvote} />
-                        <UserControls
-                            isPoster={isPoster}
-                            commentId={comment._id}
-                            deleteComment={deleteComment}
-                            setEditing={setIsEditing}
-                            setReplying={setIsReplying} />
+                        {
+                            !(isDeleted && isPoster) &&
+                            <UserControls
+                                isPoster={isPoster}
+                                commentId={comment._id}
+                                deleteComment={deleteComment}
+                                setEditing={setIsEditing}
+                                setReplying={toggleReplying} />
+                        }
                     </div>
                 </div>
             }
@@ -109,12 +117,15 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                                 timeSince={timeString}
                                 avatar={parsedUrl}
                                 isPoster={isPoster} />
-                            <UserControls
-                                isPoster={isPoster}
-                                commentId={comment._id}
-                                deleteComment={deleteComment}
-                                setEditing={setIsEditing}
-                                setReplying={setIsReplying} />
+                            {
+                                !(isDeleted && isPoster) &&
+                                <UserControls
+                                    isPoster={isPoster}
+                                    commentId={comment._id}
+                                    deleteComment={deleteComment}
+                                    setEditing={setIsEditing}
+                                    setReplying={toggleReplying} />
+                            }
                         </div>
                         <p className={styles.content}>
                             {/* add @user where user is the one the comment is in reply to */}
