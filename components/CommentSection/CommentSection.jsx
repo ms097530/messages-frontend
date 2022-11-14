@@ -282,7 +282,7 @@ export default function CommentSection({ })
             }
             {/* render AddComment section */}
             {
-                currentUser.data &&
+                currentUser.data && !currentUser.isLoading &&
                 <div className={styles.form}>
                     <AddCommentForm />
                 </div>
