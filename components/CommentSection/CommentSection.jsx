@@ -245,13 +245,13 @@ export default function CommentSection({ })
     return (
         <div className={styles.container}>
             {/* make sure able to load user data */}
-            <div className={styles.userContainer}>
+            {/* <div className={styles.userContainer}>
                 <h1 className={styles.user} style={currentUser.isLoading ? { visibility: 'hidden', textAlign: 'center' } : { textAlign: 'center' }}>
                     {!currentUser.isLoading && currentUser.data ? currentUser.data.user.username : 'NO USER FOUND'}
-                </h1>
-                {/* make sure getting image from assigned user works */}
-                {
-                    !currentUser.isLoading && currentUser.data &&
+                </h1> */}
+            {/* make sure getting image from assigned user works */}
+            {/* { */}
+            {/* !currentUser.isLoading && currentUser.data &&
                     <div className={styles.userImage}>
                         <Image
                             layout={'fixed'}
@@ -259,9 +259,9 @@ export default function CommentSection({ })
                             height={32}
                             src={domain + '/' + currentUser.data.user.imageUrl}
                             alt="user avatar" />
-                    </div>
-                }
-            </div>
+                    </div> */}
+            {/* } */}
+            {/* </div> */}
             {/* render fetched comments */}
             {
                 comments.length === 0 ? <p style={{ textAlign: 'center' }}>No comments found</p> :
