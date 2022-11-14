@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-export const UserContext = createContext(undefined)
+export const UserContext = createContext({ data: null, isLoading: true })
 export const UserDispatchContext = createContext(undefined)
 
 export function UserWrapper({ children })
