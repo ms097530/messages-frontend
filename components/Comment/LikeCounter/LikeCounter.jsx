@@ -13,8 +13,8 @@ export default function LikeCounter({ commentId, likes, upvote, downvote })
         await downvote(commentId)
     }
     const currentUser = useContext(UserContext)
-    const isLiked = currentUser.data.user.likedPosts.includes(commentId)
-    const isDisliked = currentUser.data.user.dislikedPosts.includes(commentId)
+    const isLiked = currentUser.data?.user.likedPosts.includes(commentId)
+    const isDisliked = currentUser.data?.user.dislikedPosts.includes(commentId)
     return (
         <div className={styles.container}>
             <span className={`${styles.upvote} ${isLiked ? styles.voted : ''}`} onClick={handleUpvote}>+</span>

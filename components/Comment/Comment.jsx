@@ -24,7 +24,7 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
     // let isPoster = currentUser.data.user._id === comment.user._id
     let isPoster
     if (currentUser.data)
-        isPoster = currentUser.data.user._id === comment.user._id
+        isPoster = currentUser.data?.user._id === comment?.user._id
 
     let lengthSince = new DateDiff(new Date(), new Date(comment.createdAt))
     let timeSince =
@@ -48,7 +48,7 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
             break
         }
     }
-    const parsedUrl = domain + '/' + comment.user.imageUrl.replace(/\\/g, '/')
+    const parsedUrl = domain + '/' + comment?.user.imageUrl.replace(/\\/g, '/')
 
     function cancelEditing()
     {
@@ -69,7 +69,7 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                 <div className={`${styles.comment} ${isReply ? styles.reply : ''}`}>
 
                     <CommentHeadline
-                        username={comment.user.username}
+                        username={comment?.user.username}
                         timeSince={timeString}
                         avatar={parsedUrl}
                         isPoster={isPoster} />
@@ -114,7 +114,7 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
                     <div className={styles.innerContainer}>
                         <div style={{ display: 'flex', rowGap: '0.5rem', justifyContent: 'space-between' }}>
                             <CommentHeadline
-                                username={comment.user.username}
+                                username={comment?.user.username}
                                 timeSince={timeString}
                                 avatar={parsedUrl}
                                 isPoster={isPoster} />

@@ -35,7 +35,7 @@ export default function AddCommentForm({ parentCommentId, currCommentId, content
             body: JSON.stringify({
                 content: data.comment,
                 repliedTo: parentCommentId,
-                userId: currentUser.data.user._id
+                userId: currentUser.data?.user._id
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ export default function AddCommentForm({ parentCommentId, currCommentId, content
             {
                 isLarge && !currentUser.isLoading &&
                 <div className={styles.avatarContainer}>
-                    <Image layout={'fixed'} src={domain + '/' + currentUser.data.user.imageUrl} height={32} width={32} alt={currentUser.data.user.username + ' avatar'} />
+                    <Image layout={'fixed'} src={domain + '/' + currentUser.data?.user.imageUrl} height={32} width={32} alt={currentUser.data?.user.username + ' avatar'} />
                 </div>
             }
 
@@ -84,7 +84,7 @@ export default function AddCommentForm({ parentCommentId, currCommentId, content
                     {
                         !currentUser.isLoading &&
                         <div className={styles.avatarContainer}>
-                            <Image layout={'fixed'} src={domain + '/' + currentUser.data.user.imageUrl} height={32} width={32} alt={currentUser.data.user.username + ' avatar'} />
+                            <Image layout={'fixed'} src={domain + '/' + currentUser.data?.user.imageUrl} height={32} width={32} alt={currentUser.data?.user.username + ' avatar'} />
                         </div>
                     }
                     <button className={styles.submitBtn}>
