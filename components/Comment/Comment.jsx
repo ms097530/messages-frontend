@@ -21,9 +21,10 @@ export default React.memo(function Comment({ comment, upvote, downvote, deleteCo
     const currentUser = useContext(UserContext)
     const domain = useContext(DomainContext)
 
-    let isPoster = currentUser.data.user._id === comment.user._id
-    // if (currentUser.data)
-    //     isPoster = currentUser.data.user._id === comment.user._id
+    // let isPoster = currentUser.data.user._id === comment.user._id
+    let isPoster
+    if (currentUser.data)
+        isPoster = currentUser.data.user._id === comment.user._id
 
     let lengthSince = new DateDiff(new Date(), new Date(comment.createdAt))
     let timeSince =
