@@ -7,10 +7,11 @@ import { UserContext, UserDispatchContext } from '../UserContext/UserContext'
 import Image from 'next/image'
 import { DomainContext } from '../DomainContext/DomainContext'
 import styles from './CommentSection.module.css'
+import Loader from '../Loader/Loader'
 
 export default function CommentSection({ })
 {
-    const [comments, setComments] = useState([])
+    const [comments, setComments] = useState(null)
     const currentUser = useContext(UserContext)
     const setUser = useContext(UserDispatchContext)
     const domain = useContext(DomainContext)
@@ -262,23 +263,25 @@ export default function CommentSection({ })
                     </div> */}
             {/* } */}
             {/* </div> */}
+            {/* <Loader width={'100px'} color={'var(--moderate-blue)'} animationDuration={'500ms'} /> */}
             {/* render fetched comments */}
             {
-                comments.length === 0 ? <p style={{ textAlign: 'center' }}>No comments found</p> :
-                    comments.map(comment =>
-                    {
-                        if (comment.isDeleted)
-                            comment.content = 'This comment has been deleted.'
-                        return (
-                            <Comment
-                                key={comment._id}
-                                comment={comment}
-                                upvote={upvote}
-                                downvote={downvote}
-                                deleteComment={deleteComment}
-                                isDeleted={comment.isDeleted} />
-                        )
-                    })
+                comments === null ? <Loader width={'100px'} color={'var(--moderate-blue)'} animationDuration={'500ms'} /> :
+                    comments.length === 0 ? <p style={{ textAlign: 'center' }}>No comments found</p> :
+                        comments.map(comment =>
+                        {
+                            if (comment.isDeleted)
+                                comment.content = 'This comment has been deleted.'
+                            return (
+                                <Comment
+                                    key={comment._id}
+                                    comment={comment}
+                                    upvote={upvote}
+                                    downvote={downvote}
+                                    deleteComment={deleteComment}
+                                    isDeleted={comment.isDeleted} />
+                            )
+                        })
             }
             {/* render AddComment section */}
             {
